@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programa de Acompanhamento — Imersão AIOX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --squad-black: #313131;
+      --squad-sand: #DDD1BB;
+      --squad-sand-dark: #B5AB9B;
+      --squad-sand-mid: #E0DCCF;
+      --squad-sand-light: #F4F4F4;
+      --squad-gray-deep: #484848;
+      --squad-gray-mid: #6E6E6E;
+      --squad-gray-light: #919191;
+      --squad-dark-surface: #121212;
+      --squad-dark-deep: #0D0D0D;
+      --squad-dark-abyss: #080808;
+      --border-subtle: rgba(221,209,187,0.10);
+      --border-medium: rgba(221,209,187,0.22);
+      --border-strong: rgba(221,209,187,0.40);
+      --sand-bg: rgba(221,209,187,0.04);
+      --sand-hover: rgba(221,209,187,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--squad-dark-abyss);
+      font-family: 'Inter', sans-serif;
+      color: var(--squad-sand-light);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND EFFECTS ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(221,209,187,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(221,209,187,0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    ::selection { background: var(--squad-sand); color: var(--squad-dark-abyss); }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+    @media (max-width: 768px) { .container { padding: 0 24px; } }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-mark {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--squad-sand);
+      letter-spacing: 0.12em;
+    }
+
+    .nav-sep { width: 1px; height: 16px; background: var(--border-medium); }
+
+    .nav-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--squad-gray-mid);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .nav-badge {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--squad-dark-abyss);
+      background: var(--squad-sand);
+      padding: 4px 10px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+
+    .section-label .num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--squad-sand);
+      letter-spacing: 0.1em;
+    }
+
+    .section-label .text {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(221,209,187,0.30);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .section-label .sep { width: 24px; height: 1px; background: var(--border-medium); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      z-index: 1;
+      padding: 160px 0 100px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .hero-eyebrow {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--squad-sand);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--squad-sand);
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: var(--squad-sand-light);
+      margin-bottom: 32px;
+    }
+
+    .hero-title span {
+      color: var(--squad-sand);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 56px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--squad-sand);
+      color: var(--squad-dark-abyss);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      background: #E8DFCF;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--squad-gray-light);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid var(--border-medium);
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-strong);
+      color: var(--squad-sand);
+    }
+
+    .btn-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--squad-gray-mid);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid rgba(221,209,187,0.08);
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 4px; }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--squad-sand-light);
+    }
+
+    .stat-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--squad-gray-mid);
+    }
+
+    .stat-divider { width: 1px; height: 32px; background: var(--border-subtle); }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 96px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* ── PRÓXIMOS PASSOS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      background: var(--border-subtle);
+    }
+
+    .step-card {
+      background: var(--squad-dark-abyss);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: background 0.2s;
+    }
+
+    .step-card:hover { background: var(--sand-hover); }
+
+    .step-card.featured { background: var(--sand-bg); }
+    .step-card.featured:hover { background: rgba(221,209,187,0.07); }
+
+    .step-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--squad-sand);
+      letter-spacing: 0.15em;
+    }
+
+    .step-card h3 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--squad-sand-light);
+      line-height: 1.2;
+    }
+
+    .step-card p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* ── BENEFÍCIOS ── */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+      background: var(--border-subtle);
+    }
+
+    .benefit-card {
+      background: var(--squad-dark-abyss);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: background 0.2s;
+    }
+
+    .benefit-card:hover { background: var(--sand-hover); }
+
+    .benefit-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .benefit-card h4 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--squad-sand-light);
+    }
+
+    .benefit-card p {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .benefit-tag {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--squad-sand);
+      padding: 5px 10px;
+      border: 1px solid var(--border-medium);
+      align-self: flex-start;
+    }
+
+    /* ── CRONOGRAMA ── */
+    .timeline-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      background: var(--border-subtle);
+      margin-bottom: 2px;
+    }
+
+    .timeline-month {
+      background: var(--squad-dark-abyss);
+      padding: 20px 32px;
+    }
+
+    .timeline-month-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--squad-sand);
+      margin-bottom: 6px;
+    }
+
+    .timeline-month-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--squad-sand-light);
+    }
+
+    .timeline-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      background: var(--border-subtle);
+    }
+
+    .timeline-col {
+      background: var(--squad-dark-deep);
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--squad-sand);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .timeline-item-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--squad-gray-light);
+      line-height: 1.5;
+    }
+
+    .timeline-item-text strong {
+      color: var(--squad-sand-light);
+      font-weight: 600;
+    }
+
+    .timeline-weekly-note {
+      background: var(--sand-bg);
+      border: 1px solid var(--border-medium);
+      padding: 20px 32px;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .timeline-weekly-note .icon {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--squad-sand);
+      letter-spacing: 0.15em;
+      white-space: nowrap;
+    }
+
+    .timeline-weekly-note p {
+      font-size: 13px;
+      color: var(--squad-gray-light);
+      font-weight: 300;
+    }
+
+    .timeline-weekly-note p strong {
+      color: var(--squad-sand-light);
+      font-weight: 600;
+    }
+
+    /* ── MENTORES ── */
+    .mentors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2px;
+      background: var(--border-subtle);
+    }
+
+    .mentor-card {
+      background: var(--squad-dark-abyss);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: background 0.2s;
+    }
+
+    .mentor-card:hover { background: var(--sand-hover); }
+
+    .mentor-avatar {
+      width: 64px;
+      height: 64px;
+      background: var(--squad-dark-surface);
+      border: 1px solid var(--border-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .mentor-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mentor-avatar-placeholder {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--squad-sand);
+    }
+
+    .mentor-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--squad-sand-light);
+    }
+
+    .mentor-role {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--squad-gray-mid);
+      line-height: 1.5;
+    }
+
+    /* ── ACESSO ÁREA ── */
+    .access-block {
+      background: var(--sand-bg);
+      border: 1px solid var(--border-medium);
+      padding: 56px 64px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .access-block .left { flex: 1; min-width: 240px; }
+
+    .access-block h3 {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--squad-sand-light);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .access-block p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.7;
+      max-width: 440px;
+    }
+
+    .access-block .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .access-block .coming-soon {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--squad-sand);
+      padding: 5px 12px;
+      border: 1px solid var(--border-medium);
+      align-self: flex-start;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--squad-sand-light);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 56px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 40px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-mark {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--squad-sand);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-info {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      color: rgba(221,209,187,0.20);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeup { animation: fadeUp 0.6s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .timeline-header, .timeline-items { grid-template-columns: 1fr; }
+      .access-block { padding: 40px 32px; }
+    }
+
+    @media (max-width: 640px) {
+      #hero { padding: 120px 0 72px; }
+      section { padding: 64px 0; }
+      .step-card, .benefit-card { padding: 28px 24px; }
+      .timeline-col { padding: 20px 24px; }
+      .timeline-monthly-note { padding: 16px 24px; }
+      .mentors-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container nav-inner">
+      <div class="nav-logo">
+        <span class="nav-mark">AIOX</span>
+        <div class="nav-sep"></div>
+        <span class="nav-label">Programa de Acompanhamento</span>
+      </div>
+      <span class="nav-badge">3 Meses</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" style="border-bottom:1px solid rgba(221,209,187,0.10); padding-top: 160px; padding-bottom: 100px;">
+    <div class="container animate-fadeup">
+      <div class="hero-eyebrow">Imersão AIOX · Março 2026</div>
+
+      <h1 class="hero-title">
+        Programa de
+        <span>Acompanhamento</span>
+      </h1>
+
+      <p class="hero-sub">
+        Você esteve aqui. Agora vem a parte que define resultado: 3 meses de execução real, com acompanhamento próximo de quem construiu junto com você.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#agendar" class="btn-primary">Agendar acompanhamento ↗</a>
+        <a href="#area" class="btn-ghost">Acessar área de membros →</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-value">3</span>
+          <span class="stat-label">Meses de acompanhamento</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value">1:1</span>
+          <span class="stat-label">Calls com mentores</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value">Semanal</span>
+          <span class="stat-label">Calls em grupo com agenda</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value">10+</span>
+          <span class="stat-label">Mentores disponíveis</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="agendar">
+    <div class="container">
+      <div class="section-label">
+        <span class="num">[01]</span>
+        <span class="sep"></span>
+        <span class="text">Próximos_Passos</span>
+      </div>
+
+      <h2 class="section-title">O que fazer agora</h2>
+      <p class="section-desc">Duas ações imediatas para você começar a execução ainda hoje.</p>
+
+      <div class="steps-grid">
+        <div class="step-card featured">
+          <span class="step-num">01 ——</span>
+          <h3>Agende seu acompanhamento</h3>
+          <p>Reserve sua call 1:1 com o mentor responsável pelo seu acompanhamento. Este é o primeiro passo para estruturar a execução dos próximos 3 meses.</p>
+          <a href="#" class="btn-primary" style="align-self: flex-start; margin-top: 8px;">Agendar agora ↗</a>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">02 ——</span>
+          <h3>Entre no grupo WhatsApp</h3>
+          <p>Você tem um grupo individual com seu mentor. É o canal direto para dúvidas rápidas, validações e atualizações entre as calls.</p>
+          <a href="#" class="btn-ghost" style="align-self: flex-start; margin-top: 8px;">Acessar grupo →</a>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">03 ——</span>
+          <h3>Acesse a área de membros</h3>
+          <p>Sessões gravadas, materiais, agenda das calls semanais e recursos exclusivos do programa. Login disponível em breve.</p>
+          <span class="btn-locked" style="margin-top: 8px;">🔒 Em breve</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE VOCÊ TEM ACESSO -->
+  <section id="incluso">
+    <div class="container">
+      <div class="section-label">
+        <span class="num">[02]</span>
+        <span class="sep"></span>
+        <span class="text">Seu_Programa</span>
+      </div>
+
+      <h2 class="section-title">O que está incluído</h2>
+      <p class="section-desc">Tudo que você tem acesso durante os 3 meses de acompanhamento.</p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">⟳</div>
+          <h4>Calls 1:1 com mentor</h4>
+          <p>Encontros individuais com seu mentor dedicado para acompanhar a execução, revisar resultados e ajustar a estratégia.</p>
+          <span class="benefit-tag">Mensal</span>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">◉</div>
+          <h4>Calls semanais em grupo</h4>
+          <p>Toda semana: agenda estruturada, cases ao vivo, Q&A com mentores e alinhamento de execução com os demais participantes.</p>
+          <span class="benefit-tag">Toda semana</span>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">▶</div>
+          <h4>Sessões gravadas</h4>
+          <p>Todas as calls semanais ficam gravadas na área de membros. Assista quando quiser, quantas vezes precisar.</p>
+          <span class="benefit-tag">Área de membros</span>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">✦</div>
+          <h4>WhatsApp com mentor</h4>
+          <p>Canal direto e individual com seu mentor para dúvidas rápidas, validações e suporte entre as calls.</p>
+          <span class="benefit-tag">Acesso direto</span>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">⊞</div>
+          <h4>Área de membros</h4>
+          <p>Plataforma centralizada com materiais, gravações, agenda e recursos exclusivos do programa de acompanhamento.</p>
+          <span class="benefit-tag">Em breve</span>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">◈</div>
+          <h4>Comunidade exclusiva</h4>
+          <p>Acesso à rede de empresários que participaram da imersão. Troca de experiências, parcerias e execução em comunidade.</p>
+          <span class="benefit-tag">Exclusivo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRONOGRAMA -->
+  <section id="cronograma">
+    <div class="container">
+      <div class="section-label">
+        <span class="num">[03]</span>
+        <span class="sep"></span>
+        <span class="text">Cronograma</span>
+      </div>
+
+      <h2 class="section-title">3 meses de execução</h2>
+      <p class="section-desc">Estrutura do acompanhamento de abril a junho de 2026. Agenda detalhada disponível na área de membros.</p>
+
+      <div class="timeline-weekly-note" style="margin-bottom: 2px;">
+        <span class="icon">↻ SEMANAL</span>
+        <p><strong>Call semanal em grupo</strong> — toda semana com pauta prévia, cases ao vivo e Q&A com mentores. Horário a definir com o grupo.</p>
+      </div>
+
+      <div class="timeline-header">
+        <div class="timeline-month">
+          <div class="timeline-month-label">Mês 01</div>
+          <div class="timeline-month-title">Abril</div>
+        </div>
+        <div class="timeline-month">
+          <div class="timeline-month-label">Mês 02</div>
+          <div class="timeline-month-title">Maio</div>
+        </div>
+        <div class="timeline-month">
+          <div class="timeline-month-label">Mês 03</div>
+          <div class="timeline-month-title">Junho</div>
+        </div>
+      </div>
+
+      <div class="timeline-items">
+        <div class="timeline-col">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Kickoff individual</strong> — call 1:1 de alinhamento com seu mentor</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Diagnóstico de execução</strong> — mapeamento do estado atual e prioridades</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Plano dos 90 dias</strong> — definição de marcos e entregáveis</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text">4 calls semanais em grupo</div>
+          </div>
+        </div>
+
+        <div class="timeline-col">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Review de execução</strong> — call 1:1 de revisão de resultados do mês 1</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Ajustes de rota</strong> — recalibração de estratégia com base em dados</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Aceleração</strong> — foco nas alavancas identificadas no mês 1</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text">4 calls semanais em grupo</div>
+          </div>
+        </div>
+
+        <div class="timeline-col">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Sprint final</strong> — execução concentrada nos resultados de maior impacto</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Review final 1:1</strong> — balanço dos 90 dias e próximos passos</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text"><strong>Pitch de resultados</strong> — apresentação para o grupo</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-text">4 calls semanais em grupo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENTORES -->
+  <section id="mentores">
+    <div class="container">
+      <div class="section-label">
+        <span class="num">[04]</span>
+        <span class="sep"></span>
+        <span class="text">Mentores</span>
+      </div>
+
+      <h2 class="section-title">Quem te acompanha</h2>
+      <p class="section-desc">Os mesmos mentores da imersão. Agora com foco exclusivo na sua execução.</p>
+
+      <div class="mentors-grid">
+        <!-- MENTOR 1 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M1</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 2 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M2</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 3 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M3</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 4 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M4</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 5 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M5</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 6 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M6</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 7 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M7</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 8 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M8</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 9 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M9</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+
+        <!-- MENTOR 10 -->
+        <div class="mentor-card">
+          <div class="mentor-avatar">
+            <span class="mentor-avatar-placeholder">M10</span>
+          </div>
+          <div>
+            <div class="mentor-name">Nome do Mentor</div>
+            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÁREA DE MEMBROS -->
+  <section id="area" style="border-bottom: none;">
+    <div class="container">
+      <div class="section-label">
+        <span class="num">[05]</span>
+        <span class="sep"></span>
+        <span class="text">Área_de_Membros</span>
+      </div>
+
+      <div class="access-block">
+        <div class="left">
+          <h3>Sua área exclusiva<br>está sendo preparada.</h3>
+          <p style="margin-top: 16px;">
+            Sessões gravadas, agenda das calls semanais, materiais do programa e acesso à comunidade — tudo em um só lugar. O login estará disponível em breve no e-mail cadastrado.
+          </p>
+        </div>
+        <div class="right">
+          <span class="coming-soon">Em breve</span>
+          <span class="btn-locked" style="margin-top: 8px;">Fazer login →</span>
+          <p style="font-family: 'Roboto Mono', monospace; font-size: 10px; color: var(--squad-gray-mid); letter-spacing: 0.1em; margin-top: 12px;">
+            Dúvidas? WhatsApp com seu mentor.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid rgba(221,209,187,0.10); position: relative; z-index: 1;">
+    <div class="container">
+      <footer>
+        <div class="footer-left">
+          <span class="footer-mark">AIOX</span>
+          <div class="nav-sep"></div>
+          <span class="footer-info">Programa de Acompanhamento · 2026</span>
+        </div>
+        <span class="footer-info">Florianópolis · SC</span>
+      </footer>
+    </div>
+  </div>
+
+</body>
+</html>
