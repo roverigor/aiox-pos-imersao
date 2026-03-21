@@ -506,49 +506,50 @@
     /* ── MENTORES ── */
     .mentors-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 2px;
       background: var(--border-subtle);
     }
 
     .mentor-card {
       background: var(--squad-dark-abyss);
-      padding: 32px 28px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
       transition: background 0.2s;
     }
 
     .mentor-card:hover { background: var(--sand-hover); }
 
-    .mentor-avatar {
-      width: 64px;
-      height: 64px;
-      background: var(--squad-dark-surface);
-      border: 1px solid var(--border-medium);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .mentor-photo {
+      width: 100%;
+      aspect-ratio: 3 / 4;
       overflow: hidden;
-      flex-shrink: 0;
+      background: var(--squad-dark-surface);
+      position: relative;
     }
 
-    .mentor-avatar img {
+    .mentor-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top center;
+      display: block;
+      filter: grayscale(20%);
+      transition: filter 0.3s;
     }
 
-    .mentor-avatar-placeholder {
-      font-family: 'Roboto Mono', monospace;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--squad-sand);
+    .mentor-card:hover .mentor-photo img { filter: grayscale(0%); }
+
+    .mentor-info {
+      padding: 20px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-top: 1px solid var(--border-subtle);
     }
 
     .mentor-name {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--squad-sand-light);
@@ -558,10 +559,18 @@
       font-family: 'Roboto Mono', monospace;
       font-size: 10px;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--squad-gray-mid);
+      color: var(--squad-sand);
       line-height: 1.5;
+    }
+
+    .mentor-desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--squad-gray-light);
+      line-height: 1.6;
+      margin-top: 4px;
     }
 
     /* ── ACESSO ÁREA ── */
@@ -934,115 +943,106 @@
       <p class="section-desc">Os mesmos mentores da imersão. Agora com foco exclusivo na sua execução.</p>
 
       <div class="mentors-grid">
-        <!-- MENTOR 1 -->
+
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M1</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Adavio Tittoni.jpeg" alt="Adavio Tittoni">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Adavio Tittoni</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Especialista em estruturação de negócios e aplicação prática de inteligência artificial em operações empresariais.</div>
           </div>
         </div>
 
-        <!-- MENTOR 2 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M2</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Bruno Gentil.png" alt="Bruno Gentil">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Bruno Gentil</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Referência em automação de processos e implementação de agentes de IA para escalar operações com eficiência.</div>
           </div>
         </div>
 
-        <!-- MENTOR 3 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M3</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Erica Souza.png" alt="Erica Souza">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Erica Souza</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Especialista em gestão estratégica e uso de IA para otimizar processos internos e decisões de negócio.</div>
           </div>
         </div>
 
-        <!-- MENTOR 4 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M4</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Fran.jpeg" alt="Fran">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Fran</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Focada em estratégia de crescimento e implementação de soluções de IA voltadas para resultados de alta performance.</div>
           </div>
         </div>
 
-        <!-- MENTOR 5 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M5</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Gabriel Fofonka.png" alt="Gabriel Fofonka">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Gabriel Fofonka</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Expert em desenvolvimento de squads de IA e arquitetura de sistemas inteligentes para empresas em crescimento.</div>
           </div>
         </div>
 
-        <!-- MENTOR 6 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M6</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Klaus Deor.jpeg" alt="Klaus Deor">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Klaus Deor</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Especialista em transformação digital e integração de IA para modernizar modelos de negócio e gerar vantagem competitiva.</div>
           </div>
         </div>
 
-        <!-- MENTOR 7 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M7</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Lucas Charão.jpeg" alt="Lucas Charão">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Lucas Charão</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Referência em marketing digital e estratégias de aquisição potencializadas por inteligência artificial.</div>
           </div>
         </div>
 
-        <!-- MENTOR 8 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M8</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Rodrigo Feldman.jpeg" alt="Rodrigo Feldman">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Rodrigo Feldman</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Especialista em liderança e cultura de inovação, com foco em criar ambientes organizacionais prontos para a era da IA.</div>
           </div>
         </div>
 
-        <!-- MENTOR 9 -->
         <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M9</span>
+          <div class="mentor-photo">
+            <img src="images/mentors/Talles Souza.png" alt="Talles Souza">
           </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Talles Souza</div>
+            <div class="mentor-role">Mentor</div>
+            <div class="mentor-desc">Expert em vendas e growth com aplicação de IA, especializado em escalar receita de forma previsível e sustentável.</div>
           </div>
         </div>
 
-        <!-- MENTOR 10 -->
-        <div class="mentor-card">
-          <div class="mentor-avatar">
-            <span class="mentor-avatar-placeholder">M10</span>
-          </div>
-          <div>
-            <div class="mentor-name">Nome do Mentor</div>
-            <div class="mentor-role" style="margin-top:6px;">Especialidade</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
